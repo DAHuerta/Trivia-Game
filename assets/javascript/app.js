@@ -1,9 +1,18 @@
+// Global Variables
+    // Number Correct
 var correct = 0;
+    // Number Wrong
 var wrong = 0;
+    // Number Unanswered
 var unanswered = 0;
+    // Number Timer Starts At
 var timer = 30;
-var timerRunning = "";
+    // Is Timer Running
+var timerRunning = false;
+    // Empty Array For Chosen Answers
+var selectedAnswers = []
 
+    // Object With Questions and Answer Array
 var questions = [
 
     {
@@ -49,20 +58,61 @@ var questions = [
     },
 
     {
-        question: qqa,
-        answerOptions: [ada],
+        question: "What is Cartman’s superhero name?",
+        answerOptions: ["Agua Man", "The Coon", "Fat Man", "Mysterion"],
         correctAnswer: 1
     },
 
     {
-        question: qqa,
-        answerOptions: [ada],
-        correctAnswer: 1
+        question: "What is South Parks famous Christmas character?",
+        answerOptions: ["Merry the talking Wreath", "Beau Jo Mistletoe", "Mr. Spanky the Xmas Shoe", "Mr.Hankey the Christmas Poo"],
+        correctAnswer: 3
     },
 
     {
-        question: qqa,
-        answerOptions: [ada],
-        correctAnswer: 1
+        question: "Jesus had a television talk show, what was it called?",
+        answerOptions: ["Jesus Christ Superstar", "Sins and Forgivness", "Jesus and Pals", "Jesus, Believe It or not!"],
+        correctAnswer: 2
     },
-]
+];
+
+$(".resetButton").hide();
+
+    // Reset Function
+
+    // Start Timer Count Down
+function countDown(){
+
+    if (!timerRunning) {
+        intervalId = setInterval(decrement, 1000);
+        timerRunning = true;
+    }
+    
+};
+
+    // Set Count Down Function
+    function decrement() {
+        timer--;
+        $(".timeRemaining").html("<p>Time Remaining: " + timer + "</p>");
+    }
+
+    // Set Timer Stop Function
+    function stop() {
+
+        clearInterval(intervalId);
+        timerRunning = false;
+      
+      }
+
+    // Randomly Select Question
+
+    // On Click Event For Start button
+    
+    // On Click Event For Answer Selection
+
+    
+
+
+
+
+
