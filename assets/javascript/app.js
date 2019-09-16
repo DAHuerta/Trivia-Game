@@ -1,23 +1,3 @@
-// Global Variables
-    // Number Correct
-var correct = 0;
-    // Number Wrong
-var wrong = 0;
-    // Number Unanswered
-var unanswered = 0;
-    // Number Timer Starts At
-var timer = 30;
-    // Is Timer Running
-var timerRunning = false;
-    // number of questions
-var questionCount = questions.length;
-    // User Choice
-var userChoice = "";
-
-var empty = [];
-var select;
-
-    // Object With Questions and Answer Array
 var questions = [
 
     {
@@ -80,6 +60,28 @@ var questions = [
         correctAnswer: 2
     },
 ];
+
+// Global Variables
+    // Number Correct
+var correct = 0;
+    // Number Wrong
+var wrong = 0;
+    // Number Unanswered
+var unanswered = 0;
+    // Number Timer Starts At
+var timer = 30;
+    // Is Timer Running
+var timerRunning = false;
+    // number of questions
+var questionCount = questions.length;
+    // User Choice
+var userChoice = "";
+
+var empty = [];
+var select;
+var quizQuestions;
+
+    // Object With Questions and Answer Array
 
 $(document).ready(function () {
 
@@ -145,12 +147,12 @@ function countDown(){
     // Randomly Select Question
     function selectedQuestion() {
 
-        var quizQuestions = Math.floor(Math.random() * questions.length);
+        quizQuestions = Math.floor(Math.random() * questions.length);
         select = questions[quizQuestions];
-
+        
         $(".triviaQuestion").html("<p>" + select.question + "</p>");
         for (var i = 0; i < select.answerOptions.length; i++) {
-
+            
             var userGuess = $("<div>");
             userGuess.addClass("answerSelected");
             userGuess.html(select.answerOptions[i]);
@@ -161,20 +163,24 @@ function countDown(){
     };
     
     // On Click Event For Answer Selection
-    $(".answerSelected").on("click", function() {
-
+    $(".triviaQuestion").on("click", ".answerSelected", function() {
+        
         userChoice = parseInt($(this).attr("data-value"));
-
-        if (userChoice === select.answer) {
+        
+        if (userChoice === select.correctAnswer) {
             stop();
             correct++;
             userChoice = "";
             $(".answer").html("<h1>CORRECT!</h1>");
+            questions.splice(quizQuestions, 1);
+            selectedQuestion();
         } else {
             stop();
             wrong++;
             userChoice = "";
             $(".answer").html("<h1>WRONG!</h1>");
+            questions.splice(quizQuestions, 1);
+            selectedQuestion();
         }
     });
 
