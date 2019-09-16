@@ -9,8 +9,10 @@ var unanswered = 0;
 var timer = 30;
     // Is Timer Running
 var timerRunning = false;
-    // Empty Array For Chosen Answers
-var selectedAnswers = []
+    // number of questions
+var questionCount = questions.length;
+    // User Choice
+var userChoice = "";
 var select
 
     // Object With Questions and Answer Array
@@ -93,14 +95,16 @@ function countDown(){
 
     // Set Count Down Function
     function decrement() {
+
         timer--;
         $(".timeRemaining").html("<p>Time Remaining: " + timer + "</p>");
 
         if (timer === 0) {
             unanswered++;
-            stop()
-            $(".answer").html("<p>Times Up! The correct answer is: " + select.answerOptions[select.correctAnswer] + "</p>")
+            stop();
+            $(".answer").html("<p>Times Up! The correct answer is: " + select.answerOptions[select.correctAnswer] + "</p>");
         }
+
     }
 
     // Set Timer Stop Function
@@ -113,6 +117,7 @@ function countDown(){
 
     // Randomly Select Question
     function selectedQuestion() {
+
         var quizQuestions = Math.floor(Math.random() * questions.length);
         select = questions[index];
 
@@ -131,7 +136,23 @@ function countDown(){
     // On Click Event For Start button
     
     // On Click Event For Answer Selection
+    $(".answerSelected").on("click", function() {
 
+        userChoice = parseInt($(this).attr("data-value"));
+
+        if (userChoice === select.answer) {
+            stop();
+            correct++;
+            userChoice = "";
+            $(".answer").html("<h1>CORRECT!</h1>");
+        } else {
+            stop();
+            wrong++;
+            userChoice = "";
+            $(".answer").html("<h1>Wrong!</h1>");
+        }
+
+    })
     
 
 
