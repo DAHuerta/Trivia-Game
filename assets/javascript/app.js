@@ -11,6 +11,7 @@ var timer = 30;
 var timerRunning = false;
     // Empty Array For Chosen Answers
 var selectedAnswers = []
+var select
 
     // Object With Questions and Answer Array
 var questions = [
@@ -94,6 +95,12 @@ function countDown(){
     function decrement() {
         timer--;
         $(".timeRemaining").html("<p>Time Remaining: " + timer + "</p>");
+
+        if (timer === 0) {
+            unanswered++;
+            stop()
+            $(".answer").html("<p>Times Up! The correct answer is: " + select.answerOptions[select.correctAnswer] + "</p>")
+        }
     }
 
     // Set Timer Stop Function
@@ -105,6 +112,21 @@ function countDown(){
       }
 
     // Randomly Select Question
+    function selectedQuestion() {
+        var quizQuestions = Math.floor(Math.random() * questions.length);
+        select = questions[index];
+
+        $(".triviaQuestion").html("<p>" + select.question + "</p>");
+        for (var i = 0; i < select.answerOptions.length; i++) {
+
+            var userGuess = $("<div>");
+            userGuess.addClass("answerSelected");
+            userGuess.html(select.answerOptions[i]);
+            userGuess.attr("data-value", i);
+            $(".triviaQuestion").append(userGuess);
+            
+        };
+    }
 
     // On Click Event For Start button
     
