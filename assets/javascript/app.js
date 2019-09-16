@@ -151,8 +151,7 @@ function countDown(){
             userChoice = "";
             $(".answer").html("<h1>Wrong!</h1>");
         }
-
-    })
+    });
     
 
 
