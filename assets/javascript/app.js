@@ -130,7 +130,7 @@ function countDown(){
         if (timer === 0) {
             unanswered++;
             stop();
-            $(".answer").html("<p>Times Up! The correct answer is: " + select.answerOptions[select.correctAnswer] + "</p>");
+            $(".answer").html("<p>Times Up! The correct answer was: " + select.answerOptions[select.correctAnswer] + "</p>");
             selectedQuestion();
             timer = 15;
         }
