@@ -69,7 +69,7 @@ var wrong = 0;
     // Number Unanswered
 var unanswered = 0;
     // Number Timer Starts At
-var timer = 30;
+var timer = 15;
     // Is Timer Running
 var timerRunning = false;
     // number of questions
@@ -132,7 +132,10 @@ function countDown(){
             stop();
             $(".answer").html("<p>Times Up! The correct answer is: " + select.answerOptions[select.correctAnswer] + "</p>");
             selectedQuestion();
+            timer = 15;
         }
+
+        countDown();
 
     };
 
@@ -158,7 +161,7 @@ function countDown(){
             userGuess.html(select.answerOptions[i]);
             userGuess.attr("data-value", i);
             $(".triviaQuestion").append(userGuess);
-            
+    
         };
     };
     
@@ -174,6 +177,7 @@ function countDown(){
             $(".answer").html("<h1>CORRECT!</h1>");
             questions.splice(quizQuestions, 1);
             selectedQuestion();
+            timer = 15; 
         } else {
             stop();
             wrong++;
@@ -181,7 +185,11 @@ function countDown(){
             $(".answer").html("<h1>WRONG!</h1>");
             questions.splice(quizQuestions, 1);
             selectedQuestion();
+            timer = 15;
         }
+
+        countDown();
+
     });
 
     // Run results of game
@@ -199,5 +207,6 @@ function countDown(){
             selectedQuestion();
         }
     };
+    
 
 });
