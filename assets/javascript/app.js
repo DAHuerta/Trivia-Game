@@ -80,6 +80,7 @@ var userChoice = "";
 var empty = [];
 var select;
 var quizQuestions;
+var intervalId;
 
     // Object With Questions and Answer Array
 
@@ -89,12 +90,14 @@ $(".resetButton").hide();
 
     // On Click Event For Start button
 $(".startButton").on("click", function() {
+
     $(".startButton").hide();
     selectedQuestion();
     countDown();
-    for (var i = 0; i < empty.length; i++) {
+    for (var i = 0; i < questions.length; i++) {
         empty.push(questions[i]);
     }
+
 })
 
     // Reset Function
@@ -104,10 +107,15 @@ $(".resetButton").on("click", function() {
     $(".answer").empty();
     $(".triviaQuestion").empty();
     for (var i = 0; i < empty.length; i++) {
-        options.pus(empty[i]);
+        questions.push(empty[i]);
     }
-    countDown();
+    correct = 0;
+    wrong = 0;
+    unanswered = 0;
+    timerRunning = false;
+
     selectedQuestion();
+    countDown();
 
 })
 
@@ -122,91 +130,100 @@ function countDown(){
 };
 
     // Set Count Down Function
-    function decrement() {
+function decrement() {
 
-        $(".timeRemaining").html("<p>Time Remaining: " + timer + "</p>");
-        timer--;
+    $(".timeRemaining").html("<p>Time Remaining: " + timer + "</p>");
+    timer--;
 
-        if (timer === 0) {
-            unanswered++;
-            stop();
-            $(".answer").html("<p>Times Up! The correct answer was: " + select.answerOptions[select.correctAnswer] + "</p>");
-            selectedQuestion();
-            timer = 15;
-        }
-
+    if (timer === 0) {
+        unanswered++;
+        stop();
+        $(".answer").html("<p>Times Up! The correct answer was: " + select.answerOptions[select.correctAnswer] + "</p>");
+        selectedQuestion();
+        timer = 15;
         countDown();
+    }
+
+
+};
+
+// Set Timer Stop Function
+function stop() {
+
+    clearInterval(intervalId);
+    timerRunning = false;
+    
+    };
+
+// Randomly Select Question
+function selectedQuestion() {
+
+    quizQuestions = Math.floor(Math.random() * questions.length);
+    select = questions[quizQuestions];
+    
+    if (!select) {
+
+        results();
+
+    } else {
+
+    $(".triviaQuestion").html("<p>" + select.question + "</p>");
+    for (var i = 0; i < select.answerOptions.length; i++) {
+        
+        var userGuess = $("<div>");
+        userGuess.addClass("answerSelected");
+        userGuess.html(select.answerOptions[i]);
+        userGuess.attr("data-value", i);
+        $(".triviaQuestion").append(userGuess);
 
     };
 
-    // Set Timer Stop Function
-    function stop() {
-
-        clearInterval(intervalId);
-        timerRunning = false;
-      
-      };
-
-    // Randomly Select Question
-    function selectedQuestion() {
-
-        quizQuestions = Math.floor(Math.random() * questions.length);
-        select = questions[quizQuestions];
-        
-        $(".triviaQuestion").html("<p>" + select.question + "</p>");
-        for (var i = 0; i < select.answerOptions.length; i++) {
-            
-            var userGuess = $("<div>");
-            userGuess.addClass("answerSelected");
-            userGuess.html(select.answerOptions[i]);
-            userGuess.attr("data-value", i);
-            $(".triviaQuestion").append(userGuess);
+    }
     
-        };
-    };
-    
-    // On Click Event For Answer Selection
-    $(".triviaQuestion").on("click", ".answerSelected", function() {
-        
-        userChoice = parseInt($(this).attr("data-value"));
-        
-        if (userChoice === select.correctAnswer) {
-            stop();
-            correct++;
-            userChoice = "";
-            $(".answer").html("<h1>CORRECT!</h1>");
-            questions.splice(quizQuestions, 1);
-            selectedQuestion();
-            timer = 15; 
-        } else {
-            stop();
-            wrong++;
-            userChoice = "";
-            $(".answer").html("<h1>WRONG!</h1>");
-            questions.splice(quizQuestions, 1);
-            selectedQuestion();
-            timer = 15;
-        }
+};
 
+// On Click Event For Answer Selection
+$(".triviaQuestion").on("click", ".answerSelected", function() {
+    
+    userChoice = parseInt($(this).attr("data-value"));
+    
+    if (userChoice === select.correctAnswer) {
+        stop();
+        correct++;
+        userChoice = "";
+        $(".answer").html("<h1>CORRECT!</h1>");
+        questions.splice(quizQuestions, 1);
+        timer = 15;
+        countDown(); 
+        selectedQuestion();
+    } else {
+        stop();
+        wrong++;
+        userChoice = "";
+        $(".answer").html("<h1>WRONG!</h1>");
+        questions.splice(quizQuestions, 1);
+        timer = 15;
         countDown();
+        selectedQuestion();
+    }
 
-    });
 
-    // Run results of game
-    function results() {
+});
 
-        if (correct + wrong + unanswered === questionCount) {
-            $(".triviaQuestion").empty();
-            $(",triviaQuestion").html("<h2>GAME OVER!</h2>");
-            $(".answer").append("<h2>Correct: " + correct + "</h2>");
-            $(".answer").append("<h2>Wrong: " + wrong + "</h2>");
-            $(".answer").append("<h2>Unanswered Questions: " + unanswered + "</h2>");
-            $(".resetButton").show();
-        } else {
-            countDown();
-            selectedQuestion();
-        }
-    };
-    
+// Run results of game
+function results() {
+
+        stop();
+        $(".timeRemaining").empty();
+        $(".triviaQuestion").empty();
+        $(".triviaQuestion").html("<h2>GAME OVER!</h2>");
+        $(".answer").empty();
+        $(".answer").append("<h2>Correct: " + correct + "</h2>");
+        $(".answer").append("<h2>Wrong: " + wrong + "</h2>");
+        $(".answer").append("<h2>Unanswered Questions: " + unanswered + "</h2>");
+        $(".resetButton").show();      
+
+};
+
 
 });
